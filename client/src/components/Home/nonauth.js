@@ -1,9 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
+import SearchMap from '../MapComponent/MapComponent'
+import SearchBox from '../SearchBox/SearchBox'
+
+
 function NonAuthHome() {
+  const [location, setLocation ] = useState(null)
+
+  const changeLocation = (location) => {
+    setLocation(location)
+  }
   return (
     <>
-      <h1>Home</h1>
-      <p>Homepage for everyone</p>
+      <h2>TP REPORT</h2>
+      {/* <p>You are logged in</p> */}
+      <SearchBox changeLocation={changeLocation}/>
+      <SearchMap location={location}/>
     </>
   )
 }
