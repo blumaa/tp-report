@@ -70,3 +70,33 @@ a:hover {
 .form-submit:hover {
   background-color: #45a049;
 }
+
+.map-text-background {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  background-color: indianred;
+  display: flex;
+  box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+;
+}
+
+.map-text {
+  padding: 3px;
+  color: black;
+}
+
+#search-box {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  height: 30px;
+  text-align: center;
+}
+#search-button {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  height: 33px;
+  text-align: center;
+}
