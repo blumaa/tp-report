@@ -30,13 +30,25 @@
   justify-content: space-around;
 }
 
+.navbar-title {
+  min-height: calc(100vh - 64px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(17px + 2vmin);
+  color: white;
+  width: 150px;
+  display: flex;
+  justify-content: space-around;
+}
+
 a {
   text-decoration: none;
   color: white;
 }
 
 a:hover {
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .auth-form {
@@ -58,7 +70,7 @@ a:hover {
 
 .form-submit {
   width: 100px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -77,8 +89,7 @@ a:hover {
   border-radius: 5px;
   background-color: indianred;
   display: flex;
-  box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
-;
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
 .map-text {

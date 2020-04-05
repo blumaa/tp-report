@@ -11,8 +11,6 @@ function NonAuthHome() {
   }
   return (
     <>
-      <h2>TP REPORT</h2>
-      {/* <p>You are logged in</p> */}
       <SearchBox changeLocation={changeLocation}/>
       <SearchMap location={location}/>
     </>
