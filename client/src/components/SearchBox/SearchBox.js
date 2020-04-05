@@ -16,7 +16,9 @@ const SearchBox = ({ changeLocation }) => {
     // try {
     //   const requestBody = {
     //     query: `
-    //               mutation{
+                  
+        
+    //     mutation{
     //                 createSearchTerm(searchTermInput: {
     //                   location: "${location}"
     //                 }) {

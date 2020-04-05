@@ -44,7 +44,7 @@ class SearchMap extends Component {
       // console.log("uri", uri);
       const response = await fetch(uri, headers);
       const json = await response.json();
-      console.log("map data from json", json);
+      // console.log("map data from json", json);
       this.setState({
         markers: [...json.results],
         locationLat: lat,
