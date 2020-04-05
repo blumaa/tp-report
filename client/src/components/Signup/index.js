@@ -17,7 +17,7 @@ function Signup(props) {
     setter(e.target.value);
   };
 
-  const submit = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
 
@@ -72,7 +72,7 @@ function Signup(props) {
     <>
       <h1>Sign up</h1>
       <div className="auth-form">
-        <form onSubmit={submit}>
+        <form onSubmit={handleSubmit}>
           <input
             className="form-input"
             type="email"

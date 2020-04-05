@@ -1,26 +1,32 @@
 //index.js
 import express from "express";
 import bodyParser from "body-parser";
-import expressGraphQL from "express-graphql";
+import graphqlHTTP from "express-graphql";
 import cors from "cors";
 import mongoose from "mongoose";
 import graphQLSchema from "./graphql/schema";
 import graphQLResolvers from "./graphql/resolvers";
+import schema from './graphql/schema/schema'
 require("dotenv").config();
 
 const app = express();
 
 app.use(cors());
 
-app.use(
-  "/graphql",
-  expressGraphQL({
-    schema: graphQLSchema,
-    rootValue: graphQLResolvers,
-    graphiql: true
-  }),
-  bodyParser.json()
-);
+app.use('/graphql', graphqlHTTP({
+  schema,
+  graphiql: true
+}))
+
+// app.use(
+//   "/graphql",
+//   graphqlHTTP({
+//     schema: graphQLSchema,
+//     rootValue: graphQLResolvers,
+//     graphiql: true
+//   }),
+//   bodyParser.json()
+// );
 
 function main() {
   const port = process.env.PORT || 5000;
