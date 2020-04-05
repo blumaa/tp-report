@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import { red, green } from "@material-ui/core/colors";
 import List from "@material-ui/core/List";
@@ -13,9 +12,34 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
-const GET_REPORTS = gql`
+
+
+const renderReports = (data) => { 
+  console.log(data)
+  return data.place.reports.map(report=>{
+  return(
+    report.status === "inStock" ? (
+      <ListItem>
+        <ListItemIcon>
+          <ShoppingCartIcon style={{ color: green[500] }} />
+        </ListItemIcon>
+        <ListItemText>In stock | report date and time</ListItemText>
+      </ListItem>
+    ) : (
+      <ListItem>
+        <ListItemIcon>
+          <RemoveShoppingCartIcon style={{ color: red[500] }} />
+        </ListItemIcon>
+        <ListItemText>In stock | report date and time</ListItemText>
+      </ListItem>
+    )
+  )
+})
+}
+const Reports = ({ locationInfo }) => {
+  const GET_REPORTS = gql`
   {
-    place(googleId: "313402180f019f5e8518af2be02264af561f9328") {
+    place(googleId:"${locationInfo.marker.id}"){
       name
       googleId
       reports {
@@ -25,8 +49,6 @@ const GET_REPORTS = gql`
     }
   }
 `;
-
-const Reports = ({ locationInfo }) => {
   console.log(locationInfo);
   const { data, loading, error } = useQuery(GET_REPORTS);
   const [dense, setDense] = useState(false);
@@ -35,51 +57,17 @@ const Reports = ({ locationInfo }) => {
   if (error) return <p>ERROR</p>;
   if (!data) return <p>Not found</p>;
 
-  console.log(data)
-  async function fetchReports() {
-    try {
-      console.log(locationInfo.marker.id);
-      const requestBody = {
-        query: `          
-                {
-                    place(googleId:"313402180f019f5e8518af2be02264af561f9328"){
-                    name
-                    googleId
-                    reports{
-                        itemName
-                        status
-                        }
-                    }
-                }
-                    `,
-      };
 
-      const { data } = await axios.get(
-        "http://localhost:5000/graphql",
-        requestBody
-      );
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  
+
+
+console.log('reports', data)
+
 
   return (
     <List dense={dense}>
       {/* this is where we map through reports and render them in a list*/}
-
-      <ListItem>
-        <ListItemIcon>
-          <ShoppingCartIcon style={{ color: green[500] }} />
-        </ListItemIcon>
-        <ListItemText>In stock | report date and time</ListItemText>
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          <RemoveShoppingCartIcon style={{ color: red[500] }} />
-        </ListItemIcon>
-        <ListItemText>In stock | report date and time</ListItemText>
-      </ListItem>
+      {!data.place ? <ListItem>No reports yet</ListItem> : renderReports(data)}
     </List>
   );
 };

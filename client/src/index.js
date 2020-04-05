@@ -13,21 +13,21 @@ const client = new ApolloClient({
     uri: 'http://localhost:5000/graphql',
   });
   
-  client
-  .query({
-    query: gql`
-    {
-        place(googleId: "313402180f019f5e8518af2be02264af561f9328") {
-          name
-          googleId
-          reports {
-            itemName
-            status
-          }
-        }
-      }
-    `
-  })
-  .then(result => console.log(result));
+//   client
+//   .query({
+//     query: gql`
+//     {
+//         place(googleId: "313402180f019f5e8518af2be02264af561f9328") {
+//           name
+//           googleId
+//           reports {
+//             itemName
+//             status
+//           }
+//         }
+//       }
+//     `
+//   })
+//   .then(result => console.log(result));
 
 ReactDOM.render(  <StoreContext.Provider value={store}>  <ApolloProvider client={client}><App /></ApolloProvider></StoreContext.Provider>, document.getElementById('root'));
