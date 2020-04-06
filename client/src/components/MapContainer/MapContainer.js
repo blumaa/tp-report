@@ -3,11 +3,16 @@ import GoogleMapReact from "google-map-react";
 import Geocode from "react-geocode";
 import MapMarker from "../MapMarker/MapMarker";
 import gql from "graphql-tag";
-const { createApolloFetch } = require("apollo-fetch");
+import { createApolloFetch } from "apollo-fetch";
+import { HttpLink } from "apollo-link-http";
+import { execute, makePromise } from "apollo-link";
 
-const client = createApolloFetch({
-  uri: "http://localhost:5000/graphql",
-});
+const uri = "http://localhost:5000/graphql";
+const link = new HttpLink({ uri });
+
+// const client = createApolloFetch({
+//   uri: "http://localhost:5000/graphql",
+// });
 
 const TempMarker = () => {
   // return <MapMarker locationInfo={locationInfo} />;
@@ -29,7 +34,38 @@ class MapContainer extends Component {
   //option 2: fetch from google api here
   //send data to map for display and list for display
   // each report component does individual fetching to backend to check for reports
+
+
   state = { markers: [], locationLat: 52.536228, locationLng: 13.42606 };
+  
+  addReportToMarker = (report) => {
+    // find the corresponding marker
+
+    // add report to marker's reports array
+
+    // update state
+    console.log('new report', report)
+    console.log('new report to add', report.data.addReport.googleId)
+
+    let prevStateMarkers = this.state.markers
+
+    console.log(prevStateMarkers)
+
+    const targetMarker = prevStateMarkers.find(marker=>{
+      // console.log(marker.id)
+      return marker.id == report.data.addReport.googleId
+    })
+
+    
+    console.log(targetMarker)
+    
+    // this.setState((prevState, props) => {
+    //   this.state.markers.filter(marker=>{
+    //     marker.googleId === report.googleId
+    //   })
+    // });
+    
+  }
 
   componentWillReceiveProps = (nextProps) => {
     // console.log(nextProps);
@@ -67,45 +103,72 @@ class MapContainer extends Component {
       const json = await response.json();
       // console.log("map data from json", json);
 
-      let newPlaces = [];
       this.setState({ markers: [...json.results] });
+      let newPlaces = [];
+      let newMarkers = this.state.markers
+      
       json.results.map((place) => {
         // console.log(place);
         // console.log(place.id);
-        client({
-          query: `query FetchPlace($googleId: String!){
-            place(googleId: $googleId){
-              name
-              googleId
-              reports{
-                itemName
-                status
+
+        const operation = {
+          query: gql`
+            query FetchPlace($googleId: String!) {
+              place(googleId: $googleId) {
+                name
+                googleId
+                reports {
+                  itemName
+                  status
+                }
               }
             }
-          }`,
+          `,
           variables: { googleId: `${place.id}` },
-        }).then((res) => {
-          if (res.data.place) {
-            let newPlace;
+          context: {
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+            },
+          },
+        };
 
-            newPlace = { ...place, reports: res.data.place.reports };
-            // console.log(res.data);
-            // newPlaces.push(newPlace)
-            // console.log('this is the new place', newPlace)
-            this.state.markers.filter((mark) => {
-              if (mark.id === newPlace.id) {
-                mark = newPlace;
-              }
-            });
-          }
-        });
+        makePromise(execute(link, operation))
+          .then((res) => {
+            // console.log(res.data.place)
+            if (res.data.place != null) {
+              // console.log('res data place', res.data.place)
+              let newPlace;
+
+              newPlace = { ...place, reports: res.data.place.reports };
+
+              // console.log(res.data);
+              newPlaces.push(newPlace)
+              // console.log('this is the new place', newPlace)
+
+              newMarkers = newMarkers.map((mark) => {
+                // console.log(newPlace.reports)
+                // console.log(mark)
+                if (mark.id === newPlace.id) {
+                  const newMark = {
+                    ...mark,
+                    reports: newPlace.reports
+                  }
+                  return newMark
+                  // console.log('if statement console', newMark)
+                } else {
+                  return mark
+                }
+              });
+              console.log('in theory this is the new state', newMarkers)
+            }
+          })
+          .catch((error) => console.log(`received error ${error}`));
+
+       
       });
 
-      // this.setState({
-      //   markers: [...json.results],
-      //   locationLat: lat,
-      //   locationLng: lng
-      // });
+      console.log('new new markers', newMarkers)
+
     } catch (error) {
       console.log(error);
     }
@@ -122,6 +185,7 @@ class MapContainer extends Component {
           lat={marker.geometry.location.lat}
           lng={marker.geometry.location.lng}
           marker={marker}
+          addReportToMarker={this.addReportToMarker}
         />
       );
     });

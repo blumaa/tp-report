@@ -10,7 +10,6 @@ import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 import { useQuery } from "@apollo/react-hooks";
-import { Query } from "react-apollo";
 
 import gql from "graphql-tag";
 
@@ -23,14 +22,14 @@ const renderReports = (data) => {
           <ListItemIcon>
             <ShoppingCartIcon style={{ color: green[500] }} />
           </ListItemIcon>
-          <ListItemText>In stock | report date and time</ListItemText>
+          <ListItemText>In stock | {report.dateTime}</ListItemText>
         </ListItem>
       ) : (
         <ListItem key={report.id}>
           <ListItemIcon>
             <RemoveShoppingCartIcon style={{ color: red[500] }} />
           </ListItemIcon>
-          <ListItemText>In stock | report date and time</ListItemText>
+          <ListItemText>Out of stock | {report.dateTime}</ListItemText>
         </ListItem>
       );
     });
@@ -39,6 +38,7 @@ const renderReports = (data) => {
 const Reports = ({ marker }) => {
   const [dense, setDense] = useState(false);
   const [reports, setReports] = useState(null);
+
   const GET_REPORTS = gql`
     {
       place(googleId: "${marker.id}") {
@@ -47,11 +47,14 @@ const Reports = ({ marker }) => {
         reports {
           id
           itemName
+          googleId
           status
+          dateTime
         }
       }
     }
   `;
+  
   const { loading, error, data } = useQuery(GET_REPORTS);
 
   // console.log(marker.id);

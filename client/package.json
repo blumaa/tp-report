@@ -12,6 +12,8 @@
     "apollo-boost": "^0.4.7",
     "apollo-client": "^2.6.8",
     "apollo-fetch": "^0.7.0",
+    "apollo-link": "^1.2.13",
+    "apollo-link-http": "^1.5.16",
     "axios": "^0.19.2",
     "google-map-react": "^1.1.7",
     "graphql": "^15.0.0",

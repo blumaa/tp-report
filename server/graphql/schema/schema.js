@@ -15,63 +15,6 @@ const {
   GraphQLFloat,
 } = graphql;
 
-//sample data
-// let places = [
-//   {
-//     id: "1",
-//     name: "bingos",
-//     googleId: "12345",
-//     lat: 41,
-//     lng: 13,
-//     inStock: true
-//   },
-//   {
-//     id: "2",
-//     name: "dingos",
-//     googleId: "54321",
-//     lat: 41,
-//     lng: 13,
-//     inStock: false
-//   },
-//   {
-//     id: "3",
-//     name: "Rewe",
-//     googleId: "22222",
-//     lat: 3,
-//     lng: 13,
-//     inStock: false
-//   }
-// ];
-
-// var terms = [
-//   { location: "location of the Wind", id: "1" },
-//   { location: "The Final Empire", id: "2" },
-//   { location: "The Long Earth", id: "3" }
-// ];
-
-// let reports = [
-//   {
-//     id: "1",
-//     itemName: "toilet paper",
-//     status: "inStock",
-//     createdAt: "sunday, April 5, 2020, 20:20",
-//     googleId: "12345"
-//   },
-//   {
-//     id: "2",
-//     itemName: "toilet paper",
-//     status: "outOfStock",
-//     createdAt: "sunday, April 4, 2020, 8:20",
-//     googleId: "54321"
-//   },
-//   {
-//     id: "3",
-//     itemName: "toilet paper",
-//     status: "inStock",
-//     createdAt: "sunday, April 3, 2020, 13:12",
-//     googleId: "12345"
-//   }
-// ];
 
 // define the objects
 
@@ -96,7 +39,7 @@ const PlaceType = new GraphQLObjectType({
       type: new GraphQLList(ReportType),
       resolve(parent, args) {
         // return _.filter(reports, { googleId: parent.googleId });
-        return Report.find({ placeId: parent.id });
+        return Report.find({ googleId: parent.googleId });
       },
     },
   }),
@@ -108,12 +51,16 @@ const ReportType = new GraphQLObjectType({
     id: { type: GraphQLID },
     itemName: { type: GraphQLString },
     status: { type: GraphQLString },
+    placeId: { type: GraphQLString },
+    googleId: { type: GraphQLString },
+    dateTime: {type: GraphQLString},
     place: {
       type: PlaceType,
       resolve(parent, args) {
-        console.log(parent);
+        // console.log(parent);
         // return _.find(places, { googleId: parent.googleId });
-        return Place.findById(parent.placeId);
+        // return Place.findById(parent.placeId);
+        return Place.findOne({ googleId: parent.googleId });
       },
     },
   }),
@@ -142,11 +89,10 @@ const RootQuery = new GraphQLObjectType({
         // return _.find(places, { googleId: args.googleId });
         const place = Place.findOne({ googleId: args.googleId });
         if (place) {
-          console.log(place)
-          return place
+          // console.log(place)
+          return place;
         }
-          // return {status: "success", place}
-        
+        // return {status: "success", place}
       },
     },
     places: {
@@ -161,7 +107,11 @@ const RootQuery = new GraphQLObjectType({
     },
     report: {
       type: ReportType,
-      args: { id: { type: GraphQLID }, status: { type: GraphQLString } },
+      args: {
+        id: { type: GraphQLID },
+        googleId: { type: GraphQLString },
+        status: { type: GraphQLString },
+      },
       resolve(parent, args) {
         // return _.find(reports, { id: args.id });
         return Report.findById(args.id);
@@ -207,13 +157,44 @@ const Mutation = new GraphQLObjectType({
       args: {
         itemName: { type: GraphQLString },
         status: { type: GraphQLString },
-        placeId: { type: new GraphQLNonNull(GraphQLID) },
+        placeId: { type: GraphQLString },
+        googleId: { type: GraphQLString },
+        dateTime: { type: GraphQLString },
+        // googleId: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
+
+        // console.log(typeof args.googleId, args.googleId);
+        
+        const place = Place.findOne({ googleId: args.googleId });
+
+        if (place) {
+          console.log("name of place", place);
+          let report = new Report({
+            itemName: "toilet paper",
+            googleId: args.googleId,
+            status: args.status,
+            dateTime: new Date()
+          });
+          return report.save();
+        } else {
+          console.log("place doesn't exist");
+        }
+        // search for already existing place
+
+        //if it exists, create new report
+
+        //return new report
+
+        //if it doesn't exist, create new place, then create new report
+
+        //return new place and new report
+
         let report = new Report({
           itemName: args.itemName,
           status: args.status,
           placeId: args.placeId,
+          googleId: args.googleId,
         });
         return report.save();
       },

@@ -15,6 +15,13 @@ import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { red, green } from "@material-ui/core/colors";
 import Reports from './Reports'
+import { createApolloFetch } from "apollo-fetch";
+
+
+const client = createApolloFetch({
+  uri: "http://localhost:5000/graphql",
+});
+
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -72,7 +79,7 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-const MapMarker = ({ marker }) => {
+const MapMarker = ({ marker, addReportToMarker }) => {
     // use useQuery here to fetch marker data based on search term
   // console.log("location info", marker);
   const [dense, setDense] = useState(false);
@@ -84,7 +91,35 @@ const MapMarker = ({ marker }) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleInStock = () => {
+  const handleInStock = (marker) => {
+    console.log(marker)
+    client({
+      query: `mutation createReport($googleId: String!){
+        addReport(itemName: "toilet paper", status: "inStock", googleId: $googleId){
+          id
+          itemName
+          status
+          placeId
+          googleId
+          dateTime
+          place{
+            name
+            googleId
+            reports{
+              id
+              itemName
+              status
+              placeId
+              googleId
+            }
+          }
+        }
+      }`,
+      variables: { googleId: `${marker.id}` },
+    }).then((res) => {
+      console.log(res)
+      addReportToMarker(res)
+    });
     // user clicks button
     // find or create place
     // if there is already a place, create report
@@ -123,13 +158,13 @@ const MapMarker = ({ marker }) => {
 
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleInStock} color="primary">
+          <Button autoFocus onClick={()=>handleInStock(marker)} color="primary">
             <ShoppingCartIcon style={{ color: green[500] }} />
-            Report In Stock
+            Report: This place has TP!
           </Button>
           <Button autoFocus onClick={handleOutOfStock} color="secondary">
             <RemoveShoppingCartIcon style={{ color: red[500] }} />
-            Report Out Of Stock
+            Report: This place doesn't have TP!
           </Button>
         </DialogActions>
       </Dialog>
