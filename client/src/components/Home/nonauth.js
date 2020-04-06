@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import SearchMap from '../MapComponent/MapComponent'
+import MapContainer from '../MapContainer/MapContainer'
 import SearchBox from '../SearchBox/SearchBox'
 
 
@@ -12,7 +12,7 @@ function NonAuthHome() {
   return (
     <>
       <SearchBox changeLocation={changeLocation}/>
-      <SearchMap location={location}/>
+      <MapContainer location={location}/>
     </>
   )
 }

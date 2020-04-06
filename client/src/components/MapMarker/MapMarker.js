@@ -72,8 +72,9 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-const MapMarker = ({ locationInfo }) => {
-//   console.log("location info", locationInfo);
+const MapMarker = ({ marker }) => {
+    // use useQuery here to fetch marker data based on search term
+//   console.log("location info", marker);
   const [dense, setDense] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -103,7 +104,7 @@ const MapMarker = ({ locationInfo }) => {
         onClick={handleClickOpen}
         transitioncompoonent={Transition}
       >
-        {locationInfo.marker.name}
+        {marker.name}
       </Button>
       <Dialog
         onClose={handleClose}
@@ -111,14 +112,14 @@ const MapMarker = ({ locationInfo }) => {
         open={open}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          {locationInfo.marker.name}
+          {marker.name}
         </DialogTitle>
         <DialogContent dividers>
           <Typography variant="subtitle1" gutterBottom>
             Latest Reports
           </Typography>
           {/* Display report count?*/}
-          <Reports locationInfo={locationInfo} />
+          <Reports marker={marker} />
 
         </DialogContent>
         <DialogActions>
@@ -140,7 +141,7 @@ export default MapMarker;
 
 {
   /* <Box>
-<div className="map-text">{locationInfo.marker.name}</div>
+<div className="map-text">{marker.marker.name}</div>
 <Button variant="contained" color="primary">
   Report TP in stock
 </Button>

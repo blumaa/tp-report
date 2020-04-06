@@ -11,6 +11,8 @@ const {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLList,
+  GraphQLNonNull,
+  GraphQLFloat
 } = graphql;
 
 //sample data
@@ -87,8 +89,8 @@ const PlaceType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     googleId: { type: GraphQLString },
-    lat: { type: GraphQLInt },
-    lng: { type: GraphQLInt },
+    lat: { type: GraphQLFloat },
+    lng: { type: GraphQLFloat },
     inStock: { type: GraphQLBoolean },
     reports: {
       type: new GraphQLList(ReportType),
@@ -123,6 +125,7 @@ const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
     term: {
+      // this will be used to collect user search data
       type: TermType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
@@ -133,10 +136,11 @@ const RootQuery = new GraphQLObjectType({
     },
     place: {
       type: PlaceType,
-      args: { googleId: { type: GraphQLString }, id: { type: GraphQLID} },
+      args: { googleId: { type: GraphQLString }, id: { type: GraphQLID } },
       resolve(parent, args) {
+        console.log(args.googleId)
         // return _.find(places, { googleId: args.googleId });
-        return Place.findById(args.id)
+        return Place.findOne({googleId: args.googleId});
       },
     },
     places: {
@@ -144,7 +148,9 @@ const RootQuery = new GraphQLObjectType({
       args: { lat: { type: GraphQLInt }, lng: { type: GraphQLInt } },
       resolve(parent, args) {
         // return _.filter(places, { lat: args.lat, lng: args.lng });
-        return Place.find({})
+
+        // is this where I want to fetch on the backend?
+        return Place.find({});
       },
     },
     report: {
@@ -152,14 +158,14 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID }, status: { type: GraphQLString } },
       resolve(parent, args) {
         // return _.find(reports, { id: args.id });
-        return Report.findById(args.id)
+        return Report.findById(args.id);
       },
     },
     reports: {
       type: new GraphQLList(ReportType),
       resolve(parent, args) {
         // return reports
-        return Report.find({})
+        return Report.find({});
       },
     },
   },
@@ -175,8 +181,8 @@ const Mutation = new GraphQLObjectType({
       args: {
         name: { type: GraphQLString },
         googleId: { type: GraphQLString },
-        lat: { type: GraphQLInt },
-        lng: { type: GraphQLInt },
+        lat: { type: GraphQLFloat },
+        lng: { type: GraphQLFloat },
         inStock: { type: GraphQLBoolean },
       },
       resolve(parent, args) {
@@ -195,7 +201,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         itemName: { type: GraphQLString },
         status: { type: GraphQLString },
-        placeId: { type: GraphQLID },
+        placeId: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
         let report = new Report({
