@@ -2,12 +2,18 @@ import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import Geocode from "react-geocode";
 import MapMarker from "../MapMarker/MapMarker";
+import gql from "graphql-tag";
+const { createApolloFetch } = require("apollo-fetch");
+
+const client = createApolloFetch({
+  uri: "http://localhost:5000/graphql",
+});
 
 const TempMarker = () => {
   // return <MapMarker locationInfo={locationInfo} />;
   return (
-    <div className="alert">
-      <div className="alert-text">User search bar to find toilet paper nearby.</div>
+    <div id="alert">
+      <div id="alert-text">User search bar to find toilet paper nearby.</div>
     </div>
   );
 };
@@ -56,11 +62,48 @@ class MapContainer extends Component {
       const response = await fetch(uri, headers);
       const json = await response.json();
       // console.log("map data from json", json);
-      this.setState({
-        markers: [...json.results],
-        locationLat: lat,
-        locationLng: lng
+
+      let newPlaces = []
+      this.setState({markers: [ ...json.results]})
+      json.results.map((place) => {
+        // console.log(place);
+        // console.log(place.id);
+        client({
+          query: `query FetchPlace($googleId: String!){
+            place(googleId: $googleId){
+              name
+              googleId
+              reports{
+                itemName
+                status
+              }
+            }
+          }`,
+          variables: { googleId: `${place.id}` },
+        }).then((res) => {
+          if (res.data.place) {
+            let newPlace
+
+            newPlace = { ...place, reports: res.data.place.reports}
+            // console.log(res.data);
+            // newPlaces.push(newPlace)
+            // console.log('this is the new place', newPlace)
+            this.state.markers.filter(mark=>{
+              if (mark.id === newPlace.id) {
+                mark = newPlace
+              }
+              
+            })
+            
+          }
+        });
       });
+
+      // this.setState({
+      //   markers: [...json.results],
+      //   locationLat: lat,
+      //   locationLng: lng
+      // });
     } catch (error) {
       console.log(error);
     }
@@ -70,16 +113,16 @@ class MapContainer extends Component {
     // console.log(this.props.location);
 
     const MappedMarkers = this.state.markers.map((marker) => {
-          // console.log(mark)
-          return (
-            <MapMarker
-              key={marker.id}
-              lat={marker.geometry.location.lat}
-              lng={marker.geometry.location.lng}
-              marker={marker}
-            />
-          );
-        })
+      // console.log(mark)
+      return (
+        <MapMarker
+          key={marker.id}
+          lat={marker.geometry.location.lat}
+          lng={marker.geometry.location.lng}
+          marker={marker}
+        />
+      );
+    });
 
     // console.log(this.state.locationLat)
 
@@ -96,10 +139,13 @@ class MapContainer extends Component {
             }}
             defaultZoom={14}
           >
-            <TempMarker />
+            <TempMarker
+              lat={this.state.locationLat}
+              lng={this.state.locationLng}
+            />
           </GoogleMapReact>
         </div>
-      )
+      );
     } else {
       // console.log(this.state.locationLat, this.state.locationLng)
       return (

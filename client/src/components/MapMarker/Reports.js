@@ -15,9 +15,9 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 const renderReports = (data) => {
-  console.log(data);
+  // console.log(data);
     return data.reports.map((report) => {
-      console.log(report);
+      // console.log(report);
       return report.status === "inStock" ? (
         <ListItem key={report.id}>
           <ListItemIcon>
@@ -70,24 +70,3 @@ const Reports = ({ marker }) => {
 };
 
 export default Reports;
-
-// console.log(marker);
-// const { data, loading, error } = useQuery(GET_REPORTS);
-// const [dense, setDense] = useState(false);
-
-// if (loading) return <p>Loading...</p>;
-// if (error) {
-//   console.log('erroororroorororo', error)
-
-// }
-// if (error) return <p>ERROR</p>;
-// if (!data) return <p>Not found</p>;
-
-// console.log('reports', data)
-
-// return (
-//   <List dense={dense}>
-//     {/* this is where we map through reports and render them in a list*/}
-//     {data && data.place && renderReports(data)}
-//   </List>
-// );

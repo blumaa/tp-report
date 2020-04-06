@@ -12,7 +12,7 @@ const {
   GraphQLBoolean,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLFloat
+  GraphQLFloat,
 } = graphql;
 
 //sample data
@@ -138,9 +138,15 @@ const RootQuery = new GraphQLObjectType({
       type: PlaceType,
       args: { googleId: { type: GraphQLString }, id: { type: GraphQLID } },
       resolve(parent, args) {
-        console.log(args.googleId)
+        // console.log(args.googleId);
         // return _.find(places, { googleId: args.googleId });
-        return Place.findOne({googleId: args.googleId});
+        const place = Place.findOne({ googleId: args.googleId });
+        if (place) {
+          console.log(place)
+          return place
+        }
+          // return {status: "success", place}
+        
       },
     },
     places: {
