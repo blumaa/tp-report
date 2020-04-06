@@ -44,6 +44,10 @@ class MapContainer extends Component {
         const { lat, lng } = response.results[0].geometry.location;
         // console.log(lat, lng);
         this.fetchMarkers(lat, lng);
+        this.setState({
+          locationLat: lat,
+          locationLng: lng,
+        });
       },
       (error) => {
         console.error(error);
@@ -63,8 +67,8 @@ class MapContainer extends Component {
       const json = await response.json();
       // console.log("map data from json", json);
 
-      let newPlaces = []
-      this.setState({markers: [ ...json.results]})
+      let newPlaces = [];
+      this.setState({ markers: [...json.results] });
       json.results.map((place) => {
         // console.log(place);
         // console.log(place.id);
@@ -82,19 +86,17 @@ class MapContainer extends Component {
           variables: { googleId: `${place.id}` },
         }).then((res) => {
           if (res.data.place) {
-            let newPlace
+            let newPlace;
 
-            newPlace = { ...place, reports: res.data.place.reports}
+            newPlace = { ...place, reports: res.data.place.reports };
             // console.log(res.data);
             // newPlaces.push(newPlace)
             // console.log('this is the new place', newPlace)
-            this.state.markers.filter(mark=>{
+            this.state.markers.filter((mark) => {
               if (mark.id === newPlace.id) {
-                mark = newPlace
+                mark = newPlace;
               }
-              
-            })
-            
+            });
           }
         });
       });
@@ -113,7 +115,7 @@ class MapContainer extends Component {
     // console.log(this.props.location);
 
     const MappedMarkers = this.state.markers.map((marker) => {
-      // console.log(mark)
+      // console.log(marker);
       return (
         <MapMarker
           key={marker.id}

@@ -74,7 +74,7 @@ const DialogActions = withStyles((theme) => ({
 
 const MapMarker = ({ marker }) => {
     // use useQuery here to fetch marker data based on search term
-  console.log("location info", marker);
+  // console.log("location info", marker);
   const [dense, setDense] = useState(false);
   const [open, setOpen] = useState(false);
 
