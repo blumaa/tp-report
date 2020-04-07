@@ -3,6 +3,12 @@ const _ = require("lodash");
 const Place = require("../../models/place");
 const Report = require("../../models/Report");
 
+import {
+  GraphQLDate,
+  GraphQLTime,
+  GraphQLDateTime
+} from 'graphql-iso-date';
+
 const {
   GraphQLObjectType,
   GraphQLString,
@@ -54,7 +60,7 @@ const ReportType = new GraphQLObjectType({
     status: { type: GraphQLString },
     placeId: { type: GraphQLString },
     googleId: { type: GraphQLString },
-    dateTime: {type: GraphQLString},
+    dateTime: {type: GraphQLDateTime},
     place: {
       type: PlaceType,
       resolve(parent, args) {
@@ -166,13 +172,14 @@ const Mutation = new GraphQLObjectType({
         status: { type: GraphQLString },
         placeId: { type: GraphQLString },
         googleId: { type: GraphQLString },
-        dateTime: { type: GraphQLString },
+        dateTime: { type: GraphQLDateTime },
         // googleId: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
 
         // console.log(typeof args.googleId, args.googleId);
         console.log('placeName', args.placeName)
+        console.log('args.dateTime', args.dateTime)
         
         // search for already existing place
         const place = Place.findOne({ googleId: args.googleId }, (err, result)=> {
@@ -186,14 +193,13 @@ const Mutation = new GraphQLObjectType({
             newPlace.save();
           }
         });
-
        //return new place and new report
 
         let report = new Report({
           itemName: "toilet paper",
           googleId: args.googleId,
           status: args.status,
-          dateTime: new Date()
+          dateTime: new Date().toISOString()
         });
         return report.save();
       },
