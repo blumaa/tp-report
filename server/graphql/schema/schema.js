@@ -49,6 +49,7 @@ const ReportType = new GraphQLObjectType({
   name: "Report",
   fields: () => ({
     id: { type: GraphQLID },
+    placeName: { type: GraphQLString },
     itemName: { type: GraphQLString },
     status: { type: GraphQLString },
     placeId: { type: GraphQLString },
@@ -161,6 +162,7 @@ const Mutation = new GraphQLObjectType({
       type: ReportType,
       args: {
         itemName: { type: GraphQLString },
+        placeName: { type: GraphQLString },
         status: { type: GraphQLString },
         placeId: { type: GraphQLString },
         googleId: { type: GraphQLString },
@@ -170,36 +172,28 @@ const Mutation = new GraphQLObjectType({
       resolve(parent, args) {
 
         // console.log(typeof args.googleId, args.googleId);
+        console.log('placeName', args.placeName)
         
-        const place = Place.findOne({ googleId: args.googleId });
-
-        if (place) {
-          console.log("name of place", place);
-          let report = new Report({
-            itemName: "toilet paper",
-            googleId: args.googleId,
-            status: args.status,
-            dateTime: new Date()
-          });
-          return report.save();
-        } else {
-          console.log("place doesn't exist");
-        }
         // search for already existing place
+        const place = Place.findOne({ googleId: args.googleId }, (err, result)=> {
+          console.log(result)
+          if (!result) {
+            console.log('creating new place')
+            let newPlace = new Place({
+              name: args.placeName,
+              googleId: args.googleId,
+            });
+            newPlace.save();
+          }
+        });
 
-        //if it exists, create new report
-
-        //return new report
-
-        //if it doesn't exist, create new place, then create new report
-
-        //return new place and new report
+       //return new place and new report
 
         let report = new Report({
-          itemName: args.itemName,
-          status: args.status,
-          placeId: args.placeId,
+          itemName: "toilet paper",
           googleId: args.googleId,
+          status: args.status,
+          dateTime: new Date()
         });
         return report.save();
       },

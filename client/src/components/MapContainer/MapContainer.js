@@ -36,7 +36,7 @@ const MapContainer = () => {
   // console.log(places.mapCenter)
   
     const MappedMarkers = places.allPlaces.map((marker) => {
-      console.log(marker);
+      // console.log(marker);
       return (
         <MapMarker
           key={marker.id}

@@ -35,6 +35,29 @@ function placesReducer(state = INITIAL_STATE, action) {
         allPlaces: []
       };
     }
+    case "SET_SELECTED_MARKER": {
+      // console.log(action.place)
+      return {
+        ...state,
+        selectedPlace: action.marker
+      };
+    }
+    case "ADD_REPORT": {
+      // console.log(action.report)
+      let newPlace = state.allPlaces.find(place=> {
+        return place.id === action.marker.id
+      })
+      !newPlace.reports ? newPlace.reports = [action.report] : newPlace.reports.push(action.report)
+      // console.log('ye olde place', newPlace)
+      const newAllPlaces = state.allPlaces.filter(place=>{
+        return place.id != action.marker.id
+      })
+      // console.log('laskjflkjlkasjefkljea', newAllPlaces)
+      return {
+        ...state,
+        allPlaces: [...newAllPlaces, newPlace]
+      };
+    }
     default: return state;
   }
 }

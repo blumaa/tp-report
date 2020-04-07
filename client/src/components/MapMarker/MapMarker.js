@@ -17,6 +17,8 @@ import { red, green } from "@material-ui/core/colors";
 import Reports from './Reports'
 import { createApolloFetch } from "apollo-fetch";
 
+import { useDispatch } from "redux-react-hook";
+import * as actions from "../../constants/action_types";
 
 const client = createApolloFetch({
   uri: "http://localhost:5000/graphql",
@@ -79,23 +81,38 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-const MapMarker = ({ marker, addReportToMarker }) => {
+const MapMarker = ({ marker }) => {
     // use useQuery here to fetch marker data based on search term
   // console.log("location info", marker);
   const [dense, setDense] = useState(false);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  
+  const setSelectedMarker = () => {
+    dispatch({ type: actions.SET_SELECTED_MARKER });
+  };
+  const addReport = () => {
+    dispatch({ type: actions.ADD_REPORT });
+  };
+
+  const handleMarkerClick = () => {
+    // dispatch({ type: actions.SET_SELECTED_MARKER, marker });
+
+  }
 
   const handleClickOpen = () => {
+    // console.log('handlskdjfkljesakf', marker)
     setOpen(true);
+    handleMarkerClick()
   };
   const handleClose = () => {
     setOpen(false);
   };
   const handleInStock = (marker) => {
-    console.log(marker)
+    // console.log(marker)
     client({
-      query: `mutation createReport($googleId: String!){
-        addReport(itemName: "toilet paper", status: "inStock", googleId: $googleId){
+      query: `mutation createReport($googleId: String!, $placeName: String!){
+        addReport(itemName: "toilet paper", status: "inStock", googleId: $googleId, placeName: $placeName){
           id
           itemName
           status
@@ -115,18 +132,47 @@ const MapMarker = ({ marker, addReportToMarker }) => {
           }
         }
       }`,
-      variables: { googleId: `${marker.id}` },
+      variables: { googleId: `${marker.id}`, placeName: `${marker.name}` },
     }).then((res) => {
       console.log('added a report', res)
-      addReportToMarker(res)
+      // addReportToMarker(res)
+      // dispatch({ type: actions.ADD_REPORT, report: res, marker });
+
     });
-    // user clicks button
-    // find or create place
-    // if there is already a place, create report
-    // if there is not a place, create place, create report
-    // re-render reports
+    
   };
-  const handleOutOfStock = () => {};
+  const handleOutOfStock = (marker) => {
+
+    client({
+      query: `mutation createReport($googleId: String!, $placeName: String!){
+        addReport(itemName: "toilet paper", status: "outOfStock", googleId: $googleId, placeName: $placeName){
+          id
+          itemName
+          status
+          placeId
+          googleId
+          dateTime
+          place{
+            name
+            googleId
+            reports{
+              id
+              itemName
+              status
+              placeId
+              googleId
+            }
+          }
+        }
+      }`,
+      variables: { googleId: `${marker.id}`, placeName: `${marker.name}` },
+    }).then((res) => {
+      console.log('added a report', res)
+      // addReportToMarker(res)
+      // dispatch({ type: actions.ADD_REPORT, report: res, marker });
+
+    });
+  };
 
 
 
@@ -162,7 +208,7 @@ const MapMarker = ({ marker, addReportToMarker }) => {
             <ShoppingCartIcon style={{ color: green[500] }} />
             Report: This place has TP!
           </Button>
-          <Button autoFocus onClick={handleOutOfStock} color="secondary">
+          <Button autoFocus onClick={()=>handleOutOfStock(marker)} color="secondary">
             <RemoveShoppingCartIcon style={{ color: red[500] }} />
             Report: This place doesn't have TP!
           </Button>

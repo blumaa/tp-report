@@ -9,28 +9,10 @@ import * as actions from "../../constants/action_types";
 
 import Geocode from "react-geocode";
 
-import gql from "graphql-tag";
 
 const NonAuthHome = () => {
   const dispatch = useDispatch();
-  const [locLat, setLocLat] = useState(52.536228);
-  const [locLng, setLocLng] = useState(13.42606);
 
-  const getPlaces = () => {
-    dispatch({ type: actions.GET_PLACES });
-  };
-  
-  const addPlace = () => {
-    dispatch({ type: actions.ADD_PLACE });
-  };
-  
-  const setMapCenter = () => {
-    dispatch({ type: actions.SET_MAP_CENTER });
-  };
-
-  const clearPlaces = () => {
-    dispatch({ type: actions.CLEAR_PLACES });
-  };
 
   const geoCodeLocation = (loc) => {
     Geocode.setApiKey("AIzaSyBJhyN7v8TJyfUU1HEMiQ1lTs4mXHJ1LtQ");
@@ -43,7 +25,7 @@ const NonAuthHome = () => {
         const locale = {lat, lng}
        
         dispatch({ type: actions.SET_MAP_CENTER, locale });
-        // dispatch({ type: actions.CLEAR_PLACES });
+        dispatch({ type: actions.CLEAR_PLACES });
         
         // this.setState({
         //   locationLat: lat,
@@ -81,8 +63,8 @@ const NonAuthHome = () => {
       "http://localhost:5000/graphql",
       requestBody
     );
+    // console.log(data.data.place);
     return data.data.place;
-    console.log(data.data.place);
   };
 
   const triggerLocationChange = (location) => {
