@@ -13,9 +13,7 @@ import { useDispatch } from "redux-react-hook";
 import * as actions from "../../constants/action_types";
 
 
-// <div id="alert">
-//   <div id="alert-text">User search bar to find toilet paper nearby.</div>
-// </div>
+
 
 const MapContainer = () => {
   const [lat, setLat] = useState(52.536228);
@@ -31,16 +29,13 @@ const MapContainer = () => {
 
   const { places, mapCenter } = useMappedState(mapState);
 
-  const TempMarker = ({ marker, handleSelectedPlace }) => {
+  const TempMarker = () => {
     // return <MapMarker locationInfo={locationInfo} />;
-    const foo = useCallback(
-        () => dispatch({ type: actions.SET_SELECTED_MARKER, marker }),
-        []
-      );
+    
     return (
-      <div id="alert-text" onClick={foo}>
-        map marker
-      </div>
+        <div id="alert">
+    <div id="alert-text">User search bar to find toilet paper nearby.</div>
+  </div>
     );
   };
 
