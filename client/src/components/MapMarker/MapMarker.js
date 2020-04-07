@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -24,14 +22,6 @@ const client = createApolloFetch({
   uri: "http://localhost:5000/graphql",
 });
 
-
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -84,60 +74,38 @@ const DialogActions = withStyles((theme) => ({
 const MapMarker = ({ marker }) => {
     // use useQuery here to fetch marker data based on search term
   // console.log("location info", marker);
-  const [dense, setDense] = useState(false);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   
-  const setSelectedMarker = () => {
-    dispatch({ type: actions.SET_SELECTED_MARKER });
-  };
-  const addReport = () => {
-    dispatch({ type: actions.ADD_REPORT });
-  };
-
-  const handleMarkerClick = () => {
-    // dispatch({ type: actions.SET_SELECTED_MARKER, marker });
-
-  }
 
   const handleClickOpen = () => {
-    // console.log('handlskdjfkljesakf', marker)
     setOpen(true);
-    handleMarkerClick()
   };
   const handleClose = () => {
     setOpen(false);
   };
   const handleInStock = (marker) => {
     // console.log(marker)
+    const now = new Date().toISOString()
+    // console.log('its time', now)
     client({
-      query: `mutation createReport($googleId: String!, $placeName: String!){
-        addReport(itemName: "toilet paper", status: "inStock", googleId: $googleId, placeName: $placeName){
+      query: `mutation createReport($googleId: String!, $placeName: String!, $dateTime: DateTime){
+        addReport(itemName: "toilet paper", status: "inStock", googleId: $googleId, placeName: $placeName, dateTime: $dateTime){
           id
           itemName
           status
           placeId
           googleId
           dateTime
-          place{
-            name
-            googleId
-            reports{
-              id
-              itemName
-              status
-              placeId
-              googleId
-            }
-          }
+        
         }
       }`,
-      variables: { googleId: `${marker.id}`, placeName: `${marker.name}` },
+      variables: { googleId: `${marker.id}`, placeName: `${marker.name}`, dateTime: now },
     }).then((res) => {
-      console.log('added a report', res)
+      // console.log('added a report', res)
       // addReportToMarker(res)
-      // dispatch({ type: actions.ADD_REPORT, report: res, marker });
-
+      const add = (res) => {dispatch({ type: actions.ADD_REPORT, report: res, marker })}
+      add(res)
     });
     
   };
@@ -152,24 +120,14 @@ const MapMarker = ({ marker }) => {
           placeId
           googleId
           dateTime
-          place{
-            name
-            googleId
-            reports{
-              id
-              itemName
-              status
-              placeId
-              googleId
-            }
-          }
+          
         }
       }`,
       variables: { googleId: `${marker.id}`, placeName: `${marker.name}` },
     }).then((res) => {
-      console.log('added a report', res)
+      // console.log('added a report', res)
       // addReportToMarker(res)
-      // dispatch({ type: actions.ADD_REPORT, report: res, marker });
+      dispatch({ type: actions.ADD_REPORT, report: res, marker });
 
     });
   };
@@ -220,15 +178,3 @@ const MapMarker = ({ marker }) => {
 
 export default MapMarker;
 
-{
-  /* <Box>
-<div className="map-text">{marker.marker.name}</div>
-<Button variant="contained" color="primary">
-  Report TP in stock
-</Button>
-<Button variant="contained" color="secondary">
-  Report TP out of stock
-</Button>
-</Box>
-); */
-}

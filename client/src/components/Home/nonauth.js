@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import MapContainer from "../MapContainer/MapContainer";
 import SearchBox from "../SearchBox/SearchBox";
 
@@ -41,7 +41,6 @@ const NonAuthHome = () => {
 
   const getPlaceData = async (place) => {
     // console.log(place)
-    let gotPlace;
     const requestBody = {
       query: `
       query FetchPlace($googleId: String!){
@@ -49,7 +48,9 @@ const NonAuthHome = () => {
           name
           googleId
           reports{
+            id
             itemName
+            googleId
             dateTime
             status
           }
@@ -82,7 +83,6 @@ const NonAuthHome = () => {
     const json = await response.json();
     // console.log("map data from json", json.results);
 
-    let newMarkers = []
     
     json.results.forEach(element => {
       // console.log(element)

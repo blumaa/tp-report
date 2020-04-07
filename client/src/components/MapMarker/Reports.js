@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { red, green } from "@material-ui/core/colors";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import FolderIcon from "@material-ui/icons/Folder";
 import ListItemText from "@material-ui/core/ListItemText";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -15,7 +14,14 @@ import gql from "graphql-tag";
 
 const renderReports = (data) => {
   // console.log(data);
-    return data.reports.map((report) => {
+
+  const sortedReports = data.sort(function compare(a, b) {
+    var dateA = new Date(a.dateTime);
+    var dateB = new Date(b.dateTime);
+    return dateB - dateA;
+  });
+  
+    return sortedReports.map((report) => {
       // console.log(report);
       return report.status === "inStock" ? (
         <ListItem key={report.id}>
@@ -33,38 +39,38 @@ const renderReports = (data) => {
         </ListItem>
       );
     });
+    // console.log(ports)
 };
 
 const Reports = ({ marker }) => {
-  const [dense, setDense] = useState(false);
-  const [reports, setReports] = useState(null);
+  const [dense] = useState(false);
 
-  const GET_REPORTS = gql`
-    {
-      place(googleId: "${marker.id}") {
-        name
-        googleId
-        reports {
-          id
-          itemName
-          googleId
-          status
-          dateTime
-        }
-      }
-    }
-  `;
+  // const GET_REPORTS = gql`
+  //   {
+  //     place(googleId: "${marker.id}") {
+  //       name
+  //       googleId
+  //       reports {
+  //         id
+  //         itemName
+  //         googleId
+  //         status
+  //         dateTime
+  //       }
+  //     }
+  //   }
+  // `;
   
-  const { loading, error, data } = useQuery(GET_REPORTS);
+  // const { loading, error, data } = useQuery(GET_REPORTS);
 
-  // console.log(marker.id);
-  if (loading) return <p>Loading ...</p>;
-  if (error) return <p>Error...</p>;
+  // console.log('this b the mark', marker);
+  // if (loading) return <p>Loading ...</p>;
+  // if (error) return <p>Error...</p>;
   // console.log("reports", data);
   return (
     <List dense={dense}>
-      {data.place ? (
-        renderReports(data.place)
+      {marker && marker.reports && marker.reports.length > 0 ? (
+        renderReports(marker.reports)
       ) : (
         <ListItem>no reports yet </ListItem>
       )}{" "}

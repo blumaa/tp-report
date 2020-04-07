@@ -25,8 +25,7 @@ const MapContainer = () => {
 
   const mapState = useCallback(
     (state) => ({
-      places: state.placesState,
-      mapCenter: state.placesState
+      places: state.placesState
     }),
     []
   );

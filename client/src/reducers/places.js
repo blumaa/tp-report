@@ -44,15 +44,19 @@ function placesReducer(state = INITIAL_STATE, action) {
     }
     case "ADD_REPORT": {
       // console.log(action.report)
-      let newPlace = state.allPlaces.find(place=> {
+      // console.log('old state', state.allPlaces)
+      let place = state.allPlaces.find(place=> {
         return place.id === action.marker.id
       })
-      !newPlace.reports ? newPlace.reports = [action.report] : newPlace.reports.push(action.report)
-      // console.log('ye olde place', newPlace)
+      // console.log('ye olde place', place)
+      let newPlace 
+      newPlace = !place.reports ? newPlace = { ...place, reports:  [action.report.data.addReport]} : newPlace = {...place, reports: [...place.reports, action.report.data.addReport]}
+      // place.reports.length > 0 ? newPlace.reports = [...place.reports, action.report.data.addReport] : newPlace.reports = [action.report.data.addReport] 
+      // console.log('ye neweth place', newPlace)
       const newAllPlaces = state.allPlaces.filter(place=>{
         return place.id != action.marker.id
       })
-      // console.log('laskjflkjlkasjefkljea', newAllPlaces)
+      // console.log('all the new places', newAllPlaces)
       return {
         ...state,
         allPlaces: [...newAllPlaces, newPlace]
