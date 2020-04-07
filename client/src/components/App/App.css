@@ -65,7 +65,7 @@
   justify-content: space-around;
 }
 
-svg {
+svg.main-logo {
   width: 6vw;
   height: 6vw;
   animation: rotate 3s ease-in, kaboom 3s 3s ease alternate;
