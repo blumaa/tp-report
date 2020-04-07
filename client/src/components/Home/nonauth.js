@@ -8,7 +8,7 @@ import { useDispatch } from "redux-react-hook";
 import * as actions from "../../constants/action_types";
 
 import Geocode from "react-geocode";
-
+import Map from '../MapContainer/MapTest'
 
 const NonAuthHome = () => {
   const dispatch = useDispatch();

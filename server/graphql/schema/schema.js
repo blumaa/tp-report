@@ -183,7 +183,7 @@ const Mutation = new GraphQLObjectType({
         
         // search for already existing place
         const place = Place.findOne({ googleId: args.googleId }, (err, result)=> {
-          console.log(result)
+          console.log('found place', result)
           if (!result) {
             console.log('creating new place')
             let newPlace = new Place({

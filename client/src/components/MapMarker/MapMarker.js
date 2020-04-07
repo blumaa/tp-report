@@ -102,7 +102,7 @@ const MapMarker = ({ marker }) => {
       }`,
       variables: { googleId: `${marker.id}`, placeName: `${marker.name}`, dateTime: now },
     }).then((res) => {
-      // console.log('added a report', res)
+      console.log('added a report', res)
       // addReportToMarker(res)
       const add = (res) => {dispatch({ type: actions.ADD_REPORT, report: res, marker })}
       add(res)
@@ -110,7 +110,7 @@ const MapMarker = ({ marker }) => {
     
   };
   const handleOutOfStock = (marker) => {
-
+    console.log(marker)
     client({
       query: `mutation createReport($googleId: String!, $placeName: String!){
         addReport(itemName: "toilet paper", status: "outOfStock", googleId: $googleId, placeName: $placeName){
@@ -125,10 +125,10 @@ const MapMarker = ({ marker }) => {
       }`,
       variables: { googleId: `${marker.id}`, placeName: `${marker.name}` },
     }).then((res) => {
-      // console.log('added a report', res)
+      console.log('added a report', res)
       // addReportToMarker(res)
-      dispatch({ type: actions.ADD_REPORT, report: res, marker });
-
+      const add = (res) => {dispatch({ type: actions.ADD_REPORT, report: res, marker })}
+      add(res)
     });
   };
 

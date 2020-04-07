@@ -15,15 +15,15 @@ import { useMappedState } from 'redux-react-hook';
 import './App.css';
 
 function App() {
-  useWithAuthenticate();
+  // useWithAuthenticate();
 
-  const mapState = useCallback((state) => ({
-    loading: state.sessionState.loading
-  }), [])
+  // const mapState = useCallback((state) => ({
+  //   loading: state.sessionState.loading
+  // }), [])
 
-  const { loading } = useMappedState(mapState);
+  // const { loading } = useMappedState(mapState);
 
-  if (loading) return <h1>Loading...</h1>
+  // if (loading) return <h1>Loading...</h1>
 
   return (
     <Router basename={process.env.PUBLIC_URL}>
