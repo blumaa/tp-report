@@ -80,20 +80,7 @@ svg {
   }
 }
 
-@keyframes hideshow {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+
 
 @keyframes kaboom {
   80% {
@@ -147,12 +134,58 @@ a:hover {
 
 #map-container {
   display: flex;
-  height: 70vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  height: 70vh;
   width: 100%;
   border: 6px solid rgb(71, 71, 71);
   border-radius: 4px;
   box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
 }
+
+
+#init-map-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 1;
+  left: -350px;
+  top: -50px;
+  width: 600px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: rgba(210, 212, 219, .6);
+  /* display: flex; */
+  box-shadow: 3px 3px 5px 0px rgba(61, 61, 61, 0.75);
+  padding: 30px;
+  border: 4px solid rgba(49, 49, 49, 0.7);
+  animation: hideshow 65s ease-in
+}
+
+@keyframes hideshow {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#init-map-message-text {
+  padding: 3px;
+  font-size: 2.5em;
+  color: rgba(49, 49, 49, 0.85);
+  font-weight: bold;
+}
+
 
 /* auth form */
 
@@ -200,34 +233,6 @@ a:hover {
 .map-text {
   padding: 3px;
   color: black;
-}
-
-#alert {
-  left: -1300px;
-  width: 600px;
-  height: 40px;
-  border-radius: 10px;
-  background-color: rgba(210, 212, 219, 1);
-  /* display: flex; */
-  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
-  padding: 30px;
-  opacity: 0.7;
-  border: 2px solid rgba(52, 56, 65, 1);
-  -webkit-animation: slide 5s forwards;
-  -webkit-animation-delay: 2s;
-}
-
-@keyframes slide {
-  100% {
-    left: 0;
-  }
-}
-
-#alert-text {
-  padding: 3px;
-  font-size: 2.5em;
-  color: rgba(52, 56, 65, 1);
-  font-weight: bold;
 }
 
 #search-box {

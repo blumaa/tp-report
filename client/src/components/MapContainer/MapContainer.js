@@ -33,8 +33,8 @@ const MapContainer = () => {
     // return <MapMarker locationInfo={locationInfo} />;
     
     return (
-        <div id="alert">
-    <div id="alert-text">User search bar to find toilet paper nearby.</div>
+        <div id="init-map-message">
+    <div id="init-map-message-text">User search bar to find toilet paper nearby.</div>
   </div>
     );
   };
