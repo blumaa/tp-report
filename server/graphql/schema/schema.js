@@ -98,11 +98,16 @@ const RootQuery = new GraphQLObjectType({
     places: {
       type: new GraphQLList(PlaceType),
       args: { lat: { type: GraphQLInt }, lng: { type: GraphQLInt } },
-      resolve(parent, args) {
+      async resolve(parent, args) {
         // return _.filter(places, { lat: args.lat, lng: args.lng });
-
+        try {
+          const places = await Place.find({})
+          return places
+        } catch (error) {
+          throw error
+        }
         // is this where I want to fetch on the backend?
-        return Place.find({});
+        // return Place.find({});
       },
     },
     report: {

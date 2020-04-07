@@ -33,7 +33,6 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <StoreContext.Provider value={store}>
-    {" "}
     <ApolloProvider client={client}>
       <App />
     </ApolloProvider>
