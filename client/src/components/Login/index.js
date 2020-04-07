@@ -71,7 +71,7 @@ function Login(props) {
 
                     <div><span style={{ color: "red" }}>{error || ""}</span></div>
 
-                    <input className="form-submit" type="submit" value={loading ? "Verifying..." : "Register"} />
+                    <input className="form-submit" type="submit" value={loading ? "Verifying..." : "Login"} />
                 </form>
             </div>
         </>

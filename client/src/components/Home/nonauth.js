@@ -107,10 +107,10 @@ const NonAuthHome = () => {
     
   };
   return (
-    <>
+    <div id="main">
       <SearchBox changeLocation={triggerLocationChange} />
       <MapContainer />
-    </>
+    </div>
   );
 };
 export default NonAuthHome;

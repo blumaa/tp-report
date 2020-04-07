@@ -24,32 +24,137 @@
   background: #282c34;
 }
 
+#navbar-button {
+  width: 8vw;
+  height: 2.6vw;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(52, 56, 65, 1);
+  border-radius: 5px;
+}
+
 .navbar-right {
   width: 150px;
+  display: flex;
+  vertical-align: middle;
+  justify-content: space-around;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+
+}
+
+.navbar-left {
+  width: 150px;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+
+}
+
+#navbar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  flex: 0 0 auto;
+}
+
+.navbar-logo {
+  margin-top: 2.2vw;
   display: flex;
   justify-content: space-around;
 }
 
+svg {
+  width: 6vw;
+  height: 6vw;
+  animation: rotate 3s ease-in, kaboom 3s 3s ease alternate;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hideshow {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes kaboom {
+  80% {
+    transform: scale(0.9);
+  }
+  90% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+g {
+  fill: white;
+  opacity: 0.9;
+}
+
 .navbar-title {
-  min-height: calc(100vh - 64px);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(17px + 2vmin);
-  color: white;
-  width: 150px;
+  margin-top: 1vw;
   display: flex;
   justify-content: space-around;
+  font-size: 3.5vw;
+  color: white;
+  text-shadow: 2px 2px #727272;
 }
 
 a {
   text-decoration: none;
+  font-size: 1.6vw;
   color: white;
 }
 
 a:hover {
-  color: #4caf50;
+  color: #10ebe0;
 }
+
+/* main area */
+
+#main {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#search-box-container {
+  display: flex;
+}
+
+#map-container {
+  display: flex;
+  height: 70vh;
+  width: 100%;
+  border: 6px solid rgb(71, 71, 71);
+  border-radius: 4px;
+  box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.75);
+}
+
+/* auth form */
 
 .auth-form {
   border-radius: 5px;
@@ -112,16 +217,16 @@ a:hover {
   -webkit-animation-delay: 2s;
 }
 
-
 @keyframes slide {
-100% { left: 0; }
+  100% {
+    left: 0;
+  }
 }
-
 
 #alert-text {
   padding: 3px;
   font-size: 2.5em;
-  color:rgba(52, 56, 65, 1);
+  color: rgba(52, 56, 65, 1);
   font-weight: bold;
 }
 

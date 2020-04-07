@@ -58,7 +58,7 @@ const MapContainer = () => {
 
   if (places < 1) {
     return (
-      <div style={{ height: "70vh", width: "100%" }}>
+      <div id="map-container">
         <GoogleMapReact
           bootstrapURLKeys={{
             key: "AIzaSyBJhyN7v8TJyfUU1HEMiQ1lTs4mXHJ1LtQ",
@@ -76,7 +76,7 @@ const MapContainer = () => {
   } else {
     // console.log(lat, lng)
     return (
-      <div style={{ height: "70vh", width: "100%" }}>
+      <div id="map-container">
         <GoogleMapReact
           bootstrapURLKeys={{
             key: "AIzaSyBJhyN7v8TJyfUU1HEMiQ1lTs4mXHJ1LtQ",
