@@ -235,17 +235,55 @@ a:hover {
   color: black;
 }
 
+/* main search box container */
+#main-message{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;  
+ 
+}
+
+#message-container{
+  width: 70%;
+}
+
+#main-message-left{
+  font-size: 1.2vw;
+}
+
+#main-message-right{
+  font-size: 1.2vw;
+
+}
+#search-box-container{
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* border: 4px solid rgba(250, 61, 61, 0.7); */
+}
+
+#search-form{
+  width: 100%;
+}
+
+/* search box container */
 #search-box {
   margin-bottom: 10px;
   margin-right: 10px;
   border-radius: 5px;
-  height: 30px;
+  width: 70%;
+  height: 70%;
   text-align: center;
+  
+  
 }
 #search-button {
   margin-bottom: 10px;
   margin-right: 10px;
   border-radius: 5px;
-  height: 33px;
-  text-align: center;
+  height: 80%;
 }
