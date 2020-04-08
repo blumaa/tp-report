@@ -94,7 +94,7 @@ svg.main-logo {
   }
 }
 
-g {
+g.main-logo {
   fill: white;
   opacity: 0.9;
 }
@@ -186,6 +186,25 @@ a:hover {
   font-weight: bold;
 }
 
+svg.out-of-stock-logo {
+  width: 6vw;
+  height: 6vw;
+}
+
+g.out-of-stock-logo {
+  fill: red;
+  opacity: 0.9;
+}
+
+svg.in-stock-logo {
+  width: 6vw;
+  height: 6vw;
+}
+
+g.in-stock-logo {
+  fill: green;
+  opacity: 0.9;
+}
 
 /* auth form */
 

@@ -1,15 +1,15 @@
 import React from 'react'
 
-const Logo = () => {
+const OutOfStockLogo = () => {
     return(
       <>  
 
-<svg className="main-logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
+<svg className="out-of-stock-logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="5000.000000pt" height="5000.000000pt" viewBox="0 0 5000.000000 5000.000000"
  preserveAspectRatio="xMidYMid meet">
 
-<g className="main-logo" transform="translate(0.000000,5000.000000) scale(0.100000,-0.100000)"
-stroke="none">
+<g className="out-of-stock-logo" transform="translate(0.000000,5000.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
 <path d="M24260 45084 c-601 -28 -964 -60 -1425 -125 -3087 -437 -5913 -1979
 -7921 -4324 -1284 -1499 -2188 -3280 -2623 -5165 -153 -666 -242 -1274 -293
 -2020 -17 -246 -17 -1174 0 -1420 66 -961 208 -1782 456 -2644 258 -892 645
@@ -61,4 +61,4 @@ c-16 0 -30 3 -30 8 0 20 349 224 520 305 432 203 833 315 1290 360 83 9 467 6
     )
 }
 
-export default Logo
+export default OutOfStockLogo
