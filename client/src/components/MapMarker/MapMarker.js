@@ -6,6 +6,17 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+
+
+import RoomRoundedIcon from '@material-ui/icons/RoomRounded';
+import Badge from '@material-ui/core/Badge';
+
+import RoomIcon from '@material-ui/icons/Room';
+import NotListedLocationOutlinedIcon from '@material-ui/icons/NotListedLocationOutlined';
+import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
+
 import Typography from "@material-ui/core/Typography";
 import Slide from "@material-ui/core/Slide";
 
@@ -102,7 +113,7 @@ const MapMarker = ({ marker }) => {
       }`,
       variables: { googleId: `${marker.id}`, placeName: `${marker.name}`, dateTime: now },
     }).then((res) => {
-      console.log('added a report', res)
+      // console.log('added a report', res)
       // addReportToMarker(res)
       const add = (res) => {dispatch({ type: actions.ADD_REPORT, report: res, marker })}
       add(res)
@@ -110,7 +121,7 @@ const MapMarker = ({ marker }) => {
     
   };
   const handleOutOfStock = (marker) => {
-    console.log(marker)
+    // console.log(marker)
     client({
       query: `mutation createReport($googleId: String!, $placeName: String!){
         addReport(itemName: "toilet paper", status: "outOfStock", googleId: $googleId, placeName: $placeName){
@@ -125,25 +136,66 @@ const MapMarker = ({ marker }) => {
       }`,
       variables: { googleId: `${marker.id}`, placeName: `${marker.name}` },
     }).then((res) => {
-      console.log('added a report', res)
+      // console.log('added a report', res)
       // addReportToMarker(res)
       const add = (res) => {dispatch({ type: actions.ADD_REPORT, report: res, marker })}
       add(res)
     });
   };
 
+  const determineInStock = (marker) => {
+    // console.log(marker)
+    const sortedReports = !marker.reports ? false : ( 
+      marker.reports.sort(function compare(a, b) {
+      var dateA = new Date(a.dateTime);
+      var dateB = new Date(b.dateTime);
+      return dateB - dateA;
+    })
+    );
 
+    const latestReport = sortedReports[0]
+   
+    const status = !marker.reports ? "noReports" : sortedReports[0].status
+
+    // console.log(status)
+    if (status === 'outOfStock') {
+      return <RoomIcon fontSize="large" style={{color: red[500]}}/>
+    } else if (status === 'inStock') {
+      return <RoomIcon fontSize="large" style={{color: green[500]}}/>
+    } else if (status === 'noReports') {
+
+      return <NotListedLocationIcon fontSize="large" />
+      
+    }
+  }
+
+  const SmallAvatar = withStyles((theme) => ({
+    root: {
+      width: 12,
+      height: 12,
+      border: `2px solid ${theme.palette.background.paper}`,
+    },
+  }))(Avatar);
 
   return (
     <div>
       <Button
-        variant="contained"
-        size="small"
-        color="primary"
+        
         onClick={handleClickOpen}
         transitioncompoonent={Transition}
       >
-        {marker.name}
+        <div className="marker-container">
+        <Badge
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        badgeContent={<Chip variant="outlined" size="small" label={marker.name}/>}
+      >
+          {determineInStock(marker)}
+          </Badge>
+          
+          </div>
       </Button>
       <Dialog
         onClose={handleClose}
